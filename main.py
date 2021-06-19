@@ -1,6 +1,8 @@
+import time
 import discord
 import os
 from discord.ext import commands
+from discord import FFmpegPCMAudio
 
 
 class Botty:
@@ -23,17 +25,28 @@ class Botty:
             await message.channel.send('Hello!')
 
     async def on_voice_state_update(self, member, before, after):
-        channel = after.channel
+        if before is not None:
+            print('before!')
+            chann = before.channel
+        else:
+            print('After!')
+            chann = after.channel
         bot_connection = member.guild.voice_client
-        if str(member.nick) == "Test":
+
+        print('true')
+        if str(member.nick) == "Test1":
             if bot_connection:
-                await bot_connection.move_to(channel)
+                await bot_connection.move_to(chann)
             if not self.is_connected:
                 self.is_connected = True
                 print('connecting')
-                await channel.connect()
-
-        print(str(member.nick))
+                voice = await chann.connect()
+                time.sleep(3)
+                source = FFmpegPCMAudio('intro.mp3')
+                player = voice.play(source)
+                time.sleep(24)
+                player = voice.stop()
+        print(len(chann.members))
 
     def run(self):
         self.client.run(self.token)
@@ -49,5 +62,3 @@ if __name__ == '__main__':
         main()
     except Exception as e:
         print(e)
-    # Simple bot that replies to hello messages.
-    # Future methods will be added below
