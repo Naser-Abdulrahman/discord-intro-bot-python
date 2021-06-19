@@ -33,7 +33,7 @@ class Botty:
                 print('connecting')
                 await channel.connect()
 
-        print(str(member.nick) + " 12   ")
+        print(str(member.nick))
 
     def run(self):
         self.client.run(self.token)
